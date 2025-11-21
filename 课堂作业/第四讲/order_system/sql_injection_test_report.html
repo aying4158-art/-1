@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL 注入测试报告</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 30px; }
+        .warning { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .summary { display: flex; justify-content: space-around; margin-bottom: 30px; }
+        .stat-card { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; min-width: 150px; }
+        .vulnerable { border-left: 4px solid #dc3545; }
+        .secure { border-left: 4px solid #28a745; }
+        .stat-number { font-size: 2em; font-weight: bold; }
+        .vulnerable .stat-number { color: #dc3545; }
+        .secure .stat-number { color: #28a745; }
+        .results-section { margin-bottom: 30px; }
+        .results-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .results-table th, .results-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .results-table th { background-color: #f8f9fa; }
+        .success { color: #28a745; font-weight: bold; }
+        .fail { color: #dc3545; font-weight: bold; }
+        .payload { font-family: monospace; background: #f8f9fa; padding: 2px 4px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 SQL 注入安全测试报告</h1>
+            <p>生成时间: 2025-11-21T09:56:07.699154</p>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ 重要提示：</strong> 此报告展示了 SQL 注入漏洞的危害性。请确保在生产环境中使用安全的编程实践！
+        </div>
+        
+        <div class="summary">
+            <div class="stat-card vulnerable">
+                <div class="stat-number">3/8</div>
+                <div class="stat-label">漏洞应用 - 成功注入</div>
+                <div class="stat-detail">37.5% 成功率</div>
+            </div>
+            <div class="stat-card secure">
+                <div class="stat-number">0/8</div>
+                <div class="stat-label">安全应用 - 成功注入</div>
+                <div class="stat-detail">0.0% 成功率</div>
+            </div>
+        </div>
+        
+        <div class="results-section">
+            <h2>🔓 漏洞应用测试结果</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>测试名称</th>
+                        <th>用户名</th>
+                        <th>密码</th>
+                        <th>结果</th>
+                        <th>响应时间</th>
+                        <th>状态码</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>正常登录 - 有效登录 - admin</td>
+                        <td class="payload">admin</td>
+                        <td class="payload">admin123</td>
+                        <td class="success">成功</td>
+                        <td>2.109s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>正常登录 - 无效登录 - 错误密码</td>
+                        <td class="payload">admin</td>
+                        <td class="payload">wrongpassword</td>
+                        <td class="fail">失败</td>
+                        <td>2.052s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>正常登录 - 无效登录 - 不存在用户</td>
+                        <td class="payload">nonexistent</td>
+                        <td class="payload">password</td>
+                        <td class="fail">失败</td>
+                        <td>2.087s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 经典 OR 注入</td>
+                        <td class="payload">' OR 1=1 --</td>
+                        <td class="payload">anything</td>
+                        <td class="success">成功</td>
+                        <td>2.082s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 联合查询注入</td>
+                        <td class="payload">' UNION SELECT id, username, password, email, role FROM users --</td>
+                        <td class="payload">anything</td>
+                        <td class="success">成功</td>
+                        <td>2.072s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 注释绕过</td>
+                        <td class="payload">admin'--</td>
+                        <td class="payload">anything</td>
+                        <td class="success">成功</td>
+                        <td>2.069s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 双引号注入</td>
+                        <td class="payload">" OR "1"="1</td>
+                        <td class="payload">anything</td>
+                        <td class="fail">失败</td>
+                        <td>2.064s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 布尔盲注</td>
+                        <td class="payload">' OR '1'='1</td>
+                        <td class="payload">anything</td>
+                        <td class="fail">失败</td>
+                        <td>2.063s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 时间盲注</td>
+                        <td class="payload">'; WAITFOR DELAY '00:00:05' --</td>
+                        <td class="payload">anything</td>
+                        <td class="fail">失败</td>
+                        <td>2.071s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 堆叠查询</td>
+                        <td class="payload">admin'; DROP TABLE users; --</td>
+                        <td class="payload">anything</td>
+                        <td class="fail">失败</td>
+                        <td>2.076s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 错误注入</td>
+                        <td class="payload">' AND (SELECT COUNT(*) FROM users) > 0 --</td>
+                        <td class="payload">anything</td>
+                        <td class="fail">失败</td>
+                        <td>2.08s</td>
+                        <td>200</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="results-section">
+            <h2>🔒 安全应用测试结果</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>测试名称</th>
+                        <th>用户名</th>
+                        <th>密码</th>
+                        <th>结果</th>
+                        <th>响应时间</th>
+                        <th>状态码</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>正常登录 - 有效登录 - admin</td>
+                        <td class="payload">admin</td>
+                        <td class="payload">admin123</td>
+                        <td class="success">成功</td>
+                        <td>2.087s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>正常登录 - 无效登录 - 错误密码</td>
+                        <td class="payload">admin</td>
+                        <td class="payload">wrongpassword</td>
+                        <td class="fail">失败</td>
+                        <td>2.076s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>正常登录 - 无效登录 - 不存在用户</td>
+                        <td class="payload">nonexistent</td>
+                        <td class="payload">password</td>
+                        <td class="fail">失败</td>
+                        <td>2.101s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 经典 OR 注入</td>
+                        <td class="payload">' OR 1=1 --</td>
+                        <td class="payload">anything</td>
+                        <td class="fail">失败</td>
+                        <td>2.071s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 联合查询注入</td>
+                        <td class="payload">' UNION SELECT id, username, password, email, role FROM users --</td>
+                        <td class="payload">anything</td>
+                        <td class="fail">失败</td>
+                        <td>2.061s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 注释绕过</td>
+                        <td class="payload">admin'--</td>
+                        <td class="payload">anything</td>
+                        <td class="fail">失败</td>
+                        <td>2.117s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 双引号注入</td>
+                        <td class="payload">" OR "1"="1</td>
+                        <td class="payload">anything</td>
+                        <td class="fail">失败</td>
+                        <td>2.078s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 布尔盲注</td>
+                        <td class="payload">' OR '1'='1</td>
+                        <td class="payload">anything</td>
+                        <td class="fail">失败</td>
+                        <td>2.084s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 时间盲注</td>
+                        <td class="payload">'; WAITFOR DELAY '00:00:05' --</td>
+                        <td class="payload">anything</td>
+                        <td class="fail">失败</td>
+                        <td>2.061s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 堆叠查询</td>
+                        <td class="payload">admin'; DROP TABLE users; --</td>
+                        <td class="payload">anything</td>
+                        <td class="fail">失败</td>
+                        <td>2.055s</td>
+                        <td>200</td>
+                    </tr>
+
+                    <tr>
+                        <td>SQL注入 - 错误注入</td>
+                        <td class="payload">' AND (SELECT COUNT(*) FROM users) > 0 --</td>
+                        <td class="payload">anything</td>
+                        <td class="fail">失败</td>
+                        <td>2.053s</td>
+                        <td>200</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="results-section">
+            <h2>🔍 SQL 注入测试用例</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>攻击类型</th>
+                        <th>用户名载荷</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>经典 OR 注入</td>
+                        <td class="payload">' OR 1=1 --</td>
+                        <td>绕过登录验证，获取第一个用户信息</td>
+                    </tr>
+
+                    <tr>
+                        <td>联合查询注入</td>
+                        <td class="payload">' UNION SELECT id, username, password, email, role FROM users --</td>
+                        <td>尝试获取所有用户信息</td>
+                    </tr>
+
+                    <tr>
+                        <td>注释绕过</td>
+                        <td class="payload">admin'--</td>
+                        <td>注释掉密码验证部分</td>
+                    </tr>
+
+                    <tr>
+                        <td>双引号注入</td>
+                        <td class="payload">" OR "1"="1</td>
+                        <td>使用双引号的 OR 注入</td>
+                    </tr>
+
+                    <tr>
+                        <td>布尔盲注</td>
+                        <td class="payload">' OR '1'='1</td>
+                        <td>布尔型盲注攻击</td>
+                    </tr>
+
+                    <tr>
+                        <td>时间盲注</td>
+                        <td class="payload">'; WAITFOR DELAY '00:00:05' --</td>
+                        <td>时间延迟注入（SQLServer语法）</td>
+                    </tr>
+
+                    <tr>
+                        <td>堆叠查询</td>
+                        <td class="payload">admin'; DROP TABLE users; --</td>
+                        <td>尝试删除用户表</td>
+                    </tr>
+
+                    <tr>
+                        <td>错误注入</td>
+                        <td class="payload">' AND (SELECT COUNT(*) FROM users) > 0 --</td>
+                        <td>基于错误的信息泄露</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

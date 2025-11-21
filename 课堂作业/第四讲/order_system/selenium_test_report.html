@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selenium 登录测试报告</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 30px; }
+        .summary { display: flex; justify-content: space-around; margin-bottom: 30px; }
+        .stat-card { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; min-width: 150px; }
+        .stat-number { font-size: 2em; font-weight: bold; color: #007bff; }
+        .stat-label { color: #666; margin-top: 5px; }
+        .browser-stats { margin-bottom: 30px; }
+        .browser-card { background: #fff; border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .results-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .results-table th, .results-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .results-table th { background-color: #f8f9fa; }
+        .status-pass { color: #28a745; font-weight: bold; }
+        .status-fail { color: #dc3545; font-weight: bold; }
+        .progress-bar { width: 100%; height: 20px; background-color: #e9ecef; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background-color: #28a745; transition: width 0.3s ease; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Selenium 登录页面测试报告</h1>
+            <p>生成时间: 2025-11-21T09:37:58.066703</p>
+        </div>
+        
+        <div class="summary">
+            <div class="stat-card">
+                <div class="stat-number">6</div>
+                <div class="stat-label">总测试数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">4</div>
+                <div class="stat-label">通过测试</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2</div>
+                <div class="stat-label">失败测试</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">66.67%</div>
+                <div class="stat-label">成功率</div>
+            </div>
+        </div>
+        
+        <div class="browser-stats">
+            <h2>🌐 各浏览器测试结果</h2>
+
+            <div class="browser-card">
+                <h3>firefox</h3>
+                <p>通过: 4 / 总计: 6 (成功率: 66.67%)</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 66.67%"></div>
+                </div>
+            </div>
+
+        </div>
+        
+        <h2>📋 详细测试结果</h2>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>浏览器</th>
+                    <th>测试名称</th>
+                    <th>描述</th>
+                    <th>用户名</th>
+                    <th>期望结果</th>
+                    <th>实际结果</th>
+                    <th>状态</th>
+                    <th>执行时间(s)</th>
+                    <th>错误信息</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td>firefox</td>
+                    <td>有效登录 - admin</td>
+                    <td>使用管理员账号登录</td>
+                    <td>admin</td>
+                    <td>success</td>
+                    <td>None</td>
+                    <td class="status-fail">FAIL</td>
+                    <td>6.41</td>
+                    <td>测试执行异常: Alert Text: 登录成功！这里可以跳转到主页面。
+Message: Unexpected alert dialog detected. Performed handler "dismiss"
+Stacktrace:
+RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:202:5
+UnexpectedAlertOpenError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:927:5
+GeckoDriver.prototype._handleUserPrompts@chrome://remote/content/marionette/driver.sys.mjs:3233:11
+</td>
+                </tr>
+
+                <tr>
+                    <td>firefox</td>
+                    <td>有效登录 - user</td>
+                    <td>使用普通用户账号登录</td>
+                    <td>user</td>
+                    <td>success</td>
+                    <td>None</td>
+                    <td class="status-fail">FAIL</td>
+                    <td>6.26</td>
+                    <td>测试执行异常: Alert Text: 登录成功！这里可以跳转到主页面。
+Message: Unexpected alert dialog detected. Performed handler "dismiss"
+Stacktrace:
+RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:202:5
+UnexpectedAlertOpenError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:927:5
+GeckoDriver.prototype._handleUserPrompts@chrome://remote/content/marionette/driver.sys.mjs:3233:11
+</td>
+                </tr>
+
+                <tr>
+                    <td>firefox</td>
+                    <td>无效登录 - 错误密码</td>
+                    <td>使用错误密码登录</td>
+                    <td>admin</td>
+                    <td>error</td>
+                    <td>error</td>
+                    <td class="status-pass">PASS</td>
+                    <td>6.54</td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>firefox</td>
+                    <td>无效登录 - 不存在用户</td>
+                    <td>使用不存在的用户名登录</td>
+                    <td>nonexistent</td>
+                    <td>error</td>
+                    <td>error</td>
+                    <td class="status-pass">PASS</td>
+                    <td>6.3</td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>firefox</td>
+                    <td>空用户名</td>
+                    <td>用户名为空的情况</td>
+                    <td></td>
+                    <td>validation_error</td>
+                    <td>validation_error</td>
+                    <td class="status-pass">PASS</td>
+                    <td>3.32</td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>firefox</td>
+                    <td>空密码</td>
+                    <td>密码为空的情况</td>
+                    <td>admin</td>
+                    <td>validation_error</td>
+                    <td>validation_error</td>
+                    <td class="status-pass">PASS</td>
+                    <td>3.25</td>
+                    <td></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

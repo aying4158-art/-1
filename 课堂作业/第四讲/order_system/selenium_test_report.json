@@ -1,0 +1,90 @@
+{
+  "test_summary": {
+    "total_tests": 6,
+    "passed_tests": 4,
+    "failed_tests": 2,
+    "success_rate": 66.67
+  },
+  "browser_stats": {
+    "firefox": {
+      "total": 6,
+      "passed": 4,
+      "failed": 2
+    }
+  },
+  "detailed_results": [
+    {
+      "test_name": "有效登录 - admin",
+      "description": "使用管理员账号登录",
+      "username": "admin",
+      "password": "admin123",
+      "expected_result": "success",
+      "actual_result": null,
+      "status": "FAIL",
+      "error_message": "测试执行异常: Alert Text: 登录成功！这里可以跳转到主页面。\nMessage: Unexpected alert dialog detected. Performed handler \"dismiss\"\nStacktrace:\nRemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8\nWebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:202:5\nUnexpectedAlertOpenError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:927:5\nGeckoDriver.prototype._handleUserPrompts@chrome://remote/content/marionette/driver.sys.mjs:3233:11\n",
+      "execution_time": 6.41,
+      "browser": "firefox"
+    },
+    {
+      "test_name": "有效登录 - user",
+      "description": "使用普通用户账号登录",
+      "username": "user",
+      "password": "user123",
+      "expected_result": "success",
+      "actual_result": null,
+      "status": "FAIL",
+      "error_message": "测试执行异常: Alert Text: 登录成功！这里可以跳转到主页面。\nMessage: Unexpected alert dialog detected. Performed handler \"dismiss\"\nStacktrace:\nRemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8\nWebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:202:5\nUnexpectedAlertOpenError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:927:5\nGeckoDriver.prototype._handleUserPrompts@chrome://remote/content/marionette/driver.sys.mjs:3233:11\n",
+      "execution_time": 6.26,
+      "browser": "firefox"
+    },
+    {
+      "test_name": "无效登录 - 错误密码",
+      "description": "使用错误密码登录",
+      "username": "admin",
+      "password": "wrongpassword",
+      "expected_result": "error",
+      "actual_result": "error",
+      "status": "PASS",
+      "error_message": null,
+      "execution_time": 6.54,
+      "browser": "firefox"
+    },
+    {
+      "test_name": "无效登录 - 不存在用户",
+      "description": "使用不存在的用户名登录",
+      "username": "nonexistent",
+      "password": "password",
+      "expected_result": "error",
+      "actual_result": "error",
+      "status": "PASS",
+      "error_message": null,
+      "execution_time": 6.3,
+      "browser": "firefox"
+    },
+    {
+      "test_name": "空用户名",
+      "description": "用户名为空的情况",
+      "username": "",
+      "password": "password",
+      "expected_result": "validation_error",
+      "actual_result": "validation_error",
+      "status": "PASS",
+      "error_message": null,
+      "execution_time": 3.32,
+      "browser": "firefox"
+    },
+    {
+      "test_name": "空密码",
+      "description": "密码为空的情况",
+      "username": "admin",
+      "password": "",
+      "expected_result": "validation_error",
+      "actual_result": "validation_error",
+      "status": "PASS",
+      "error_message": null,
+      "execution_time": 3.25,
+      "browser": "firefox"
+    }
+  ],
+  "generated_at": "2025-11-21T09:37:58.066703"
+}

